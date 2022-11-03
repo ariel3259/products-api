@@ -4,14 +4,14 @@ import { Express } from "express";
 import express from 'express'
 import sequelize from "./configs/dbCon"
 import Routers from "./routers";
-import cors from "cors"
+import Middlewares from "./middlewares";
 
 const app: Express = express()
 const port: string | undefined = process.env.PORT
 
 //Start middlewares
-app.use(express.json())
-app.use(cors())
+const middlewares: Middlewares = new Middlewares(app);
+middlewares.startMiddlewares();
 
 //Starting routers
 const routers: Routers = new Routers(app);

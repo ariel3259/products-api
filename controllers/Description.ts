@@ -10,13 +10,18 @@ export default class DescriptionController {
     constructor(){
     }
 
-    async getAll(req: Request, res: Response): Promise<void> {
+    async getAll(
+            req: Request<{}, DescriptionResponse[] | {message: string}, {}, Pagination>,
+            res: Response<DescriptionResponse[] | {message: string}>)
+        : Promise<void> {
         const descriptionService: DescriptionService = new DescriptionService();
         try{
-            const {offset, limit}: Pagination = req.query as unknown as Pagination;
-            const paginatedDescriptions: Page<Description> = await descriptionService.getAll(parseInt(offset + ''), parseInt(limit + ''));
+            const {offset, limit}: Pagination = req.query;
+            const paginatedDescriptions: Page<Description> = await descriptionService.getAll(parseInt(offset), parseInt(limit));
             const descriptionsResponse: DescriptionResponse[] = DescriptionResponseMapper.toResponseArray(paginatedDescriptions.elements);
-            res.setHeader('x-total-count', paginatedDescriptions.totalItems);
+            res.set({
+                'x-total-count': paginatedDescriptions.totalItems
+            });
             res.json(descriptionsResponse);
         }catch(err){
             console.log(err);
@@ -24,7 +29,10 @@ export default class DescriptionController {
         }
     }
 
-    async save(req: Request, res: Response): Promise<void> {
+    async save(
+            req: Request<{}, DescriptionResponse | {message: string}, Description, {}>, 
+            res: Response<DescriptionResponse | {message: string}>)
+        : Promise<void> {
         const descriptionService: DescriptionService = new DescriptionService();
         try{
             const descriptionToSave: Description = req.body
@@ -39,14 +47,28 @@ export default class DescriptionController {
         }
     }
 
-    async update(req: Request, res: Response): Promise<void> {
+    async update(
+            req: Request<{id: number}, DescriptionResponse | {message: string}, Description, {}>,
+            res: Response<DescriptionResponse | {message: string}>)
+        : Promise<void> {
         const descriptionService: DescriptionService = new DescriptionService();
         try{
-            const {id}: {id: number} = req.params as unknown as {id: number}
-            const descriptionToModify: Description = req.body as unknown as Description;
+            const {id}: {id: number} = req.params;
+            const descriptionToModify: Description = req.body;
             descriptionToModify.id = id;
             const descriptionModified: Description = await descriptionService.update(descriptionToModify);
-
+            if(!descriptionModified) {
+                res.status(400).json({
+                    id: 0,
+                    name: '',
+                    university: '',
+                    standar: '',
+                    integral: '',
+                    premium: '',
+                    idEnterprise: 0
+                });
+                return;
+            }
             const descriptionResponse: DescriptionResponse = DescriptionResponseMapper.toResponse(descriptionModified);
             res.status(200).json(descriptionResponse);
         }catch(err){
@@ -55,11 +77,14 @@ export default class DescriptionController {
         }
     }
 
-    async delete(req: Request, res: Response): Promise<void> {
+    async delete(
+            req: Request<{id: number}, null | {message: string}, {}, {}>,
+            res: Response<null | {message: string}>)
+        : Promise<void> {
         const descriptionService: DescriptionService = new DescriptionService();
         try{
-            const {id}: {id: number} = req.params as unknown as {id: number}
-            await descriptionService.delete(parseInt(id + ''));
+            const {id}: {id: number} = req.params; 
+            await descriptionService.delete(id);
             res.status(204).json(null);
         }catch(err){
             console.log(err);
