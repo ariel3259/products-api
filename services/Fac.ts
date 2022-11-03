@@ -27,7 +27,18 @@ export default class FacService {
     }
 
     async update(fac: Fac): Promise<Fac> {
-        const facModified = await fac.save();
+        await Fac.update(fac, {
+            where: {
+                id: fac.id,
+                state: true
+            }
+        });
+        const facModified: Fac = await Fac.findOne({
+            where: {
+                id: fac.id,
+                state: true
+            }
+        }) as Fac;
         return facModified;
     }
 

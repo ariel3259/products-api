@@ -1,11 +1,13 @@
 import dotenv from "dotenv"
 dotenv.config();
+import morgan from "morgan";
 import { Express } from "express";
 import express from 'express'
 import sequelize from "./configs/dbCon"
 import Routers from "./routers";
 import Middlewares from "./middlewares";
 
+morgan(':method :url :status - :response-time ms')
 const app: Express = express()
 const port: string | undefined = process.env.PORT
 

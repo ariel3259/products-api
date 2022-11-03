@@ -29,9 +29,50 @@ export default class FacController {
 
     async save(
             req: Request<{}, FacResponse | {message: string}, Fac, {}>,
-            res:Response<FacResponse | {message: string}>)
+            res: Response<FacResponse | {message: string}>)
         : Promise<void> {
         const fac: Fac = req.body;
-
+        const facService: FacService = new FacService();
+        try{
+            const facSaved: Fac = await facService.save(fac);
+            const facResponse: FacResponse = FacResponseMapper.toResponse(facSaved);
+            res.status(201).json(facResponse);
+        }catch(err) {
+            console.log(err);
+            res.status(502).json({message: 'server error'});
+        }
     }
+
+    async update(
+            req: Request<{id: number}, FacResponse | {message: string}, Fac, {}>,
+            res: Response<FacResponse | {message: string}>
+    ) : Promise<void> {
+        const facService: FacService = new FacService();
+        const {id}: {id: number} = req.params
+        const fac: Fac = req.body;
+        fac.id = id
+        try{
+            const facModified: Fac = await facService.update(fac);
+            const facResponse: FacResponse = FacResponseMapper.toResponse(facModified);
+            res.json(facResponse);
+        }catch(err){
+            console.log(err);
+            res.status(502).json({message: 'server error'})
+        }
+    }
+
+    async delete(
+        req: Request<{id: number}, null | {message: string}>,
+        res: Response<null | {message: string}>
+    ): Promise<void> {
+        const facService: FacService = new FacService();
+        const {id}: {id: number} = req.params;
+        try{
+            await facService.delete(id)
+            res.status(204).json(null);
+        }catch(err) {
+            console.log(err);
+            res.status(502).json({message: 'server error'})
+        }
+    } 
 }
