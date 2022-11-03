@@ -42,6 +42,7 @@ export default class DescriptionService {
     }
 
     async delete(id: number): Promise<void> {
+        console.log(id)
         await Description.update({
             state: false
         }, {

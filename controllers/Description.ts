@@ -12,7 +12,6 @@ export default class DescriptionController {
 
     async getAll(req: Request, res: Response): Promise<void> {
         const descriptionService: DescriptionService = new DescriptionService();
-        console.log(req)
         try{
             const {offset, limit}: Pagination = req.query as unknown as Pagination;
             const paginatedDescriptions: Page<Description> = await descriptionService.getAll(parseInt(offset + ''), parseInt(limit + ''));
@@ -27,7 +26,6 @@ export default class DescriptionController {
 
     async save(req: Request, res: Response): Promise<void> {
         const descriptionService: DescriptionService = new DescriptionService();
-        console.log(req)
         try{
             const descriptionToSave: Description = req.body
             
@@ -48,6 +46,7 @@ export default class DescriptionController {
             const descriptionToModify: Description = req.body as unknown as Description;
             descriptionToModify.id = id;
             const descriptionModified: Description = await descriptionService.update(descriptionToModify);
+
             const descriptionResponse: DescriptionResponse = DescriptionResponseMapper.toResponse(descriptionModified);
             res.status(200).json(descriptionResponse);
         }catch(err){
@@ -61,7 +60,7 @@ export default class DescriptionController {
         try{
             const {id}: {id: number} = req.params as unknown as {id: number}
             await descriptionService.delete(parseInt(id + ''));
-            res.status(204);
+            res.status(204).json(null);
         }catch(err){
             console.log(err);
             res.status(502).json({message: 'server error'});
