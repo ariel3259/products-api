@@ -1,0 +1,8 @@
+Variables de entorno: 
+
+DATABASE,
+PORT,
+PORT_DB,
+USERNAME_DB,
+PASSWORD,
+HOST

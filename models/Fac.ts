@@ -15,7 +15,7 @@ Fac.init({
     id: {
         autoIncrement: true,
         primaryKey: true, 
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER
     },
     question: DataTypes.STRING,
     answer: DataTypes.STRING,

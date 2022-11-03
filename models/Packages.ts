@@ -15,7 +15,7 @@ Packages.init({
     id: {
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER
     },
     name: DataTypes.STRING,
     code: {

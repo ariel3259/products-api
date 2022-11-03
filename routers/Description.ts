@@ -1,13 +1,14 @@
-import { Router } from "express";
+import { Express } from "express";
 import DescriptionController from "../controllers/Description";
 
 export default class DescriptionRouters {
-    private router: Router
+    private router: Express
     private descriptionController: DescriptionController
 
-    constructor(router: Router) {
+    constructor(router: Express) {
         this.router = router
         this.descriptionController = new DescriptionController()
+
     }
 
     startRouting(){

@@ -17,7 +17,7 @@ class Description extends Model<InferAttributes<Description>, InferCreationAttri
 Description.init({
     id: {
         autoIncrement: true,
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         primaryKey: true
     },
     name: DataTypes.STRING,
