@@ -5,7 +5,7 @@ class Packages extends Model<InferAttributes<Packages>, InferCreationAttributes<
     declare id: CreationOptional<number>
     declare name: string
     declare code: number
-    declare typeId: number
+    declare type_Id: number
     declare createdAt: CreationOptional<Date>
     declare updatedAt: CreationOptional<Date>
     declare state: boolean
@@ -20,9 +20,10 @@ Packages.init({
     name: DataTypes.STRING,
     code: {
         unique: true,
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
-    typeId: DataTypes.STRING,
+    type_Id: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     state: DataTypes.BOOLEAN

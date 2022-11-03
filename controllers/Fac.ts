@@ -53,6 +53,15 @@ export default class FacController {
         fac.id = id
         try{
             const facModified: Fac = await facService.update(fac);
+            if(!facModified){
+                res.status(400).json({
+                    id: 0,
+                    answer: '',
+                    question: '',
+                    typeId: 0
+                });
+                return;
+            }
             const facResponse: FacResponse = FacResponseMapper.toResponse(facModified);
             res.json(facResponse);
         }catch(err){
